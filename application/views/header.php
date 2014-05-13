@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title>PTH Coaching Center</title>
+    <title>Quantum Group</title>
     <link rel="stylesheet" href="<?php echo base_url(); ?>css/my_style.css" type="text/css"/>
     <link rel="stylesheet" href="<?php echo base_url(); ?>css/style.css" type="text/css"/>
     <link rel="stylesheet" href="<?php echo base_url(); ?>css/jquery.wysiwyg.css" type="text/css"/>
