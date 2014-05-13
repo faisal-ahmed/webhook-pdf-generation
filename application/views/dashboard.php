@@ -1,7 +1,5 @@
 <div class="sidebar_content">
-    <h1 class="dashboard_title">Welcome to PTH Coaching Center</h1>
-
-    <img class="dashboard_image" src="<?php echo base_url(); ?>images/cloudSMS.png" width="500" alt="Cloud SMS system"/>
+    <h1 class="dashboard_title">Welcome to Quantum Group PDF Template Uploader</h1>
 
     <p>Aenean facilisis ligula eget orci adipiscing varius. Curabitur sem ligula, egestas vel bibendum sed, sodales eu
         nulla. Vestibulum luctus aliquam feugiat. Donec porta interdum placerat. Donec velit enim, porta vitae euismod

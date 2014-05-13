@@ -2,7 +2,7 @@
     <div class="block_head">
         <div class="bheadl"></div>
         <div class="bheadr"></div>
-        <h2>PTH Coaching Center</h2>
+        <h2>Quantum Group</h2>
     </div>
     <!-- .block_head ends -->
     <div class="block_content">
