@@ -18,6 +18,7 @@
 
     <p>
         <input type="submit" class="submit long" value="Update Password"/>
+        <input type="reset" class="submit long" value="Reset Form"/>
     </p>
     <?php echo form_close() ?>
 </div>        <!-- .sidebar_content ends -->

@@ -2,7 +2,7 @@
 
 require_once 'model_helper.php';
 
-class User_persistance extends model_helper
+class User_persistence extends model_helper
 {
     function __construct()
     {
