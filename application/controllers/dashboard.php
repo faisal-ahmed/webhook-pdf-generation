@@ -13,6 +13,7 @@ class dashboard extends controller_helper{
     function __construct() {
         parent::__construct();
         $this->checkLogin();
+        $this->addViewData('active_menu', 'dashboard');
     }
 
     function index(){

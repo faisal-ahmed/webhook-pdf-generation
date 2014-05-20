@@ -71,7 +71,7 @@ class User_persistance extends model_helper
         $this->db->where('user_id', $user_id);
         $this->db->where('password', md5($current_password));
         if ($this->db->count_all_results() == 0) {
-            return 'Incorrect current password!';
+            return 'Incorrect user or password!';
         }
 
         $this->db->where('user_id', $user_id);
