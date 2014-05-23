@@ -60,8 +60,7 @@ class User_persistence extends model_helper
         return false;
     }
 
-    function update_profile(){
-        $user_id = $this->getPost('user_id');
+    function update_profile($user_id){
         $current_password = $this->getPost('current_password');
         $data = array();
         $data['username'] = $this->getPost('username');
