@@ -1,11 +1,12 @@
 <?php
 $uploaddir = dirname(__FILE__).'/uploads/';
-
-$uploadfile = $uploaddir . basename($_FILES['userfile']['name']);
+$template_name = str_replace(" ", "_", $_REQUEST['template_name']);
+$file_name = $template_name . substr(basename($_FILES['userfile']['name']), strrpos(basename($_FILES['userfile']['name']), "."));
+$uploadfile = $uploaddir . $file_name;
 
 if (move_uploaded_file($_FILES['userfile']['tmp_name'], $uploadfile)) {
-    echo "File Uploaded!";
+    echo $file_name . "___File Uploaded!";
 } else {
-    echo "An error occurred while uploading your file, please try again.";
+    echo "___An error occurred while uploading your file, please try again.";
 }
 ?>

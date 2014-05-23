@@ -17,12 +17,18 @@ class template extends controller_helper{
     }
 
     function index(){
-        //$this->template_persistence->createTables();
         redirect('template/addTemplate', 'refresh');
     }
 
     function addTemplate(){
         $this->addViewData('active_menu', 'add_template');
+        if ($this->input->server('REQUEST_METHOD') === 'POST') {
+            if (($addTemlateStatus = $this->template_persistence->addTemplate()) !== true){
+                $this->addViewData('error', array($addTemlateStatus));
+            } else {
+                $this->addViewData('success', array('The template has been created successfully!'));
+            }
+        }
         $this->loadview('add_template');
     }
 
@@ -34,5 +40,12 @@ class template extends controller_helper{
     function listTemplate(){
         $this->addViewData('active_menu', 'list_template');
         $this->loadview('list_template');
+    }
+
+    function checkTemplateNameForAjax(){
+        $status = $this->template_persistence->checkDuplicateTemplate();
+        echo json_encode(
+            array("status" => $status)
+        );
     }
 }

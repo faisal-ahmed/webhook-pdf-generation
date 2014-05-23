@@ -24,6 +24,10 @@ class model_helper  extends CI_Model{
         return $return;
     }
 
+    function getRootRealPath(){
+        return str_replace("system/", "", BASEPATH);
+    }
+
     function sendSMS($number, $text) {
         $text = urlencode($text);
         try {

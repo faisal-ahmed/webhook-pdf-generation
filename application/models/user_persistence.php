@@ -9,41 +9,6 @@ class User_persistence extends model_helper
         parent::__construct();
     }
 
-    function createTables(){
-        $this->load->dbforge();
-
-        $this->dbforge->add_field(array(
-            'user_id' => array(
-                'type' => 'INT',
-                'constraint' => 5,
-                'unsigned' => TRUE,
-                'auto_increment' => TRUE
-            ),
-            'username' => array(
-                'type' => 'VARCHAR',
-                'constraint' => '100',
-            ),
-            'password' => array(
-                'type' => 'VARCHAR',
-                'constraint' => '100',
-            ),
-        ));
-        $this->dbforge->add_key('user_id');
-
-        $query = $this->dbforge->create_table('users');
-
-        var_dump($query);
-
-        $data = array(
-            'username' => 'faisal' ,
-            'password' => '81dc9bdb52d04dc20036dbd8313ed055' ,
-        );
-
-        $query = $this->db->insert('users', $data);
-
-        var_dump($query);
-    }
-
     function user_has_identity()
     {
         $username = $this->getPost('username');
