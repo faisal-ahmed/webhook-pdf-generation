@@ -39,6 +39,7 @@ class template extends controller_helper{
 
     function listTemplate(){
         $this->addViewData('active_menu', 'list_template');
+        $this->addViewData('lists', $this->template_persistence->getTemplateLists());
         $this->loadview('list_template');
     }
 

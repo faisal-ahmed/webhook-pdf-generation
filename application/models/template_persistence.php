@@ -117,6 +117,18 @@ class Template_persistence extends model_helper
 
         return ($result !== true) ? "Server Error! Template cannot be added now. Please try again later." : $result;
     }
+
+    function getTemplateLists(){
+        $ret = array();
+        $query = $this->db->get('template');
+
+        foreach ($query->result() as $row)
+        {
+            $ret[] = (array)$row;
+        }
+
+        return $ret;
+    }
 }
 
 ?>

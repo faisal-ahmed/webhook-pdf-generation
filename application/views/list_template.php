@@ -1,13 +1,26 @@
 <div class="sidebar_content">
-    <h1 class="dashboard_title">Welcome to Quantum Group PDF Template Uploader</h1>
+    <table cellpadding="0" cellspacing="0" width="100%" class="sortable">
+        <thead>
+        <tr>
+            <th width="10" style="display: none"><input type="checkbox" class="check_all" /></th>
+            <th style="border-left: 1px solid #ddd;">Template Name</th>
+            <th>Date Created</th>
+            <th>Date Updated</th>
+            <th style="border-top: 1px solid #ddd; text-align: center;">Actions</th>
+        </tr>
+        </thead>
 
-    <p>Aenean facilisis ligula eget orci adipiscing varius. Curabitur sem ligula, egestas vel bibendum sed, sodales eu
-        nulla. Vestibulum luctus aliquam feugiat. Donec porta interdum placerat. Donec velit enim, porta vitae euismod
-        ut, fermentum eu felis. Morbi aliquet, libero vel gravida facilisis, enim risus consequat tellus, vitae luctus
-        est diam non nisi. Vivamus eget leo sit amet neque ultricies blandit. Sed tristique erat a sem ullamcorper
-        tempor. Curabitur turpis lorem, semper et pharetra in, scelerisque in magna. Ut at tortor sed diam mattis
-        rhoncus vel eget turpis. Praesent id diam velit, ullamcorper semper augue. Curabitur at orci tellus, sed
-        tincidunt enim. Vivamus sed dolor vitae purus dignissim luctus quis sed nunc. Sed urna enim, auctor sit amet
-        volutpat ut, porta sed leo. Integer dictum molestie elementum. Nullam dapibus tempus enim, id tincidunt arcu
-        elementum varius.</p>
+        <tbody>
+        <?php foreach ($lists as $key => $value) { ?>
+            <tr>
+                <td style="display: none"><input type="checkbox" /></td>
+                <td style="border-left: 1px solid #ddd;"><a href="#"><?php echo $value['template_name'] ?></a></td>
+                <td><?php echo date("m/d/Y", $value['created']) ?></td>
+                <td><?php echo ($value['updated'] != '') ? date("m/d/Y", $value['updated']) : "Not Updated Yet"; ?></td>
+                <td class="delete" style="text-decoration: none;"><a href="#">View PDF</a> | <a href="#">Update</a> | <a href="#">Delete</a></td>
+            </tr>
+        <?php } ?>
+        </tbody>
+
+    </table>
 </div>        <!-- .sidebar_content ends -->
