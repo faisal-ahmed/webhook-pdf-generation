@@ -175,6 +175,13 @@
         }
 
         if (error) {
+            if (validated) {
+                validated = 0;
+                $('#uploadTemplate').slideToggle();
+                $('#next').slideToggle();
+                $('#uploaded_html_file_name').val('');
+                $('#uploaded_css_file_name').val('');
+            }
             $('#template_name').addClass('redBorder');
         }
         return error;

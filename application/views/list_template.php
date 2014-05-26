@@ -18,7 +18,7 @@
                 <td style="border-left: 1px solid #ddd;"><a href="#"><?php echo $value['template_name'] ?></a></td>
                 <td><?php echo date("m/d/Y", $value['created']) ?></td>
                 <td><?php echo ($value['updated'] != '') ? date("m/d/Y", $value['updated']) : "Not Updated Yet"; ?></td>
-                <td class="delete" style="text-decoration: none;"><a href="#">View PDF</a> | <a href="#">Update</a> | <a href="#" onclick="confirmDelete(<?php echo $value['template_id'] ?>)">Delete</a></td>
+                <td class="delete" style="text-decoration: none;"><a href="<?php echo base_url() ?>index.php/pdf/view/<?php echo $value['template_id']; ?>" target="_blank">View PDF</a> | <a href="#">Update</a> | <a href="#" onclick="confirmDelete(<?php echo $value['template_id'] ?>)">Delete</a></td>
             </tr>
         <?php } } else {
             echo "<tr><td style=\"border-left: 1px solid #ddd; text-align: center; font-weight: bold;\" colspan=\"5\">There is no template to display. Please create a template first.</td></tr>";

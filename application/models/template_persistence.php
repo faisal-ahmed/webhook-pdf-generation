@@ -162,6 +162,55 @@ class Template_persistence extends model_helper
 
         return $ret;
     }
+
+    function getURL($id){
+        $ret = array();
+        $htmlFile = '';
+        $cssFile = '';
+        $template_name = '';
+        $query = $this->db->get_where('template', array('template_id' => $id));
+        foreach ($query->result() as $row)
+        {
+            $template_name = str_replace(" ", "_", $row->template_name);
+            $htmlFile = $row->uploaded_html_file_name;
+            $cssFile = $row->uploaded_css_file_name;
+            break;
+        }
+
+        $contents = '<html>';
+        if ($htmlFile !== '') {
+            if ($cssFile !== '') {
+                $cssFile = $this->getRootRealPath() . "static/" . $template_name . "/" . $cssFile;
+                ///////////////////CSS Load Start////////////////////
+                $contents .= '<style type="text/css">';
+                $handle = fopen($cssFile, "rb");
+                while (!feof($handle)) {
+                    $contents .= fread($handle, 8192);
+                }
+                fclose($handle);
+                $contents .= '</style>';
+                ///////////////////CSS Load End////////////////////
+            }
+
+            $htmlFile = $this->getRootRealPath() . "static/" . $template_name . "/" . $htmlFile;
+            ///////////////////HTML Load Start////////////////////
+            $contents .= "<body>";
+            $handle = fopen($htmlFile, "rb");
+            while (!feof($handle)) {
+                $contents .= fread($handle, 8192);
+            }
+            fclose($handle);
+            $contents .= "</body>";
+            ///////////////////HTML Load End//////////////////////
+        } else {
+            $contents .= "<body><h1>Error! No HTML template was found. Please upload HTML template first.</h1></body>";
+        }
+        $contents .= "</html>";
+        $ret['html'] = $contents;
+        $ret['template_name'] = $template_name;
+
+        return $ret;
+    }
 }
 
 ?>
