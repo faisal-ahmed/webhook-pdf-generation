@@ -39,8 +39,23 @@ class template extends controller_helper{
 
     function listTemplate(){
         $this->addViewData('active_menu', 'list_template');
+        if ($this->input->get_post('status', true) === 'deleteSuccessful') {
+            $this->addViewData('success', array("The template has been deleted successfully!"));
+        } else if ($this->input->get_post('status', true) === 'deleteFailed') {
+            $this->addViewData('error', array("Server Error! Delete failed. Please try again."));
+        }
         $this->addViewData('lists', $this->template_persistence->getTemplateLists());
         $this->loadview('list_template');
+    }
+
+    function deleteTemplate(){
+        $id = $this->uri->segment(3);
+        $deleteStatus = $this->template_persistence->deleteTemplate($id);
+        if ($deleteStatus) {
+            redirect('template/listTemplate/?status=deleteSuccessful', 'refresh');
+        } else {
+            redirect('template/listTemplate/?status=deleteFailed', 'refresh');
+        }
     }
 
     function checkTemplateNameForAjax(){

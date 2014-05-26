@@ -118,6 +118,39 @@ class Template_persistence extends model_helper
         return ($result !== true) ? "Server Error! Template cannot be added now. Please try again later." : $result;
     }
 
+    function deleteTemplate($id){
+        $query = $this->db->get_where('template', array('template_id' => $id));
+        $htmlFileName = '';
+        $cssFileName = '';
+        $pdfFileName = '';
+        $folderName = '';
+
+        foreach ($query->result() as $row)
+        {
+            $folderName = $row->template_name;
+            $htmlFileName = $row->uploaded_html_file_name;
+            $cssFileName = $row->uploaded_css_file_name;
+            $pdfFileName = $row->uploaded_pdf_file_name;
+            break;
+        }
+
+        $folderDeleted = false;
+        $dbRecord = false;
+
+        $htmlDeleted = ($htmlFileName != '') ? $this->deleteUploadedFile($htmlFileName, $folderName) : true;
+        $cssDeleted = ($cssFileName != '') ? $this->deleteUploadedFile($cssFileName, $folderName) : true;
+        $pdfDeleted = ($pdfFileName != '') ? $this->deleteUploadedFile($pdfFileName, $folderName) : true;
+
+        if ($htmlDeleted && $cssDeleted && $pdfDeleted) {
+            $folderDeleted = $this->deleteFolder($folderName);
+        }
+        if ($folderDeleted) {
+            $dbRecord = $this->db->delete('template', array('template_id' => $id));
+        }
+
+        return $dbRecord;
+    }
+
     function getTemplateLists(){
         $ret = array();
         $query = $this->db->get('template');
