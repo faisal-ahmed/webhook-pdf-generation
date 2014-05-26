@@ -49,6 +49,8 @@
             <input type="file" id="cssupload"/><span id="uploadmsg">Upload CSS type file only.</span>
         </p>
 
+        <hr/>
+
         <p>
             <input type="submit" class="submit long" value="Create Template"/>
             <input type="reset" onclick="resetTemplateUpload('1');" class="submit long" value="Reset Form"/>

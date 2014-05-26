@@ -33,4 +33,11 @@
 </head>
 <body>
 <div id="hld">
+    <div id="loadingDiv" style="display: none;">
+        <div id="loading">
+        </div>
+        <div id="loadingImg">
+            <img src="<?php echo base_url() ?>images/loading.gif" />
+        </div>
+    </div>
     <div class="wrapper">        <!-- wrapper begins -->

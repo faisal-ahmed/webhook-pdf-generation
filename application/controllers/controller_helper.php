@@ -7,6 +7,8 @@
  * To change this template use File | Settings | File Templates.
  */
 
+require_once (BASEPATH . '../application/libraries/Utilities.php');
+
 class controller_helper extends CI_Controller{
 
     private $viewData;

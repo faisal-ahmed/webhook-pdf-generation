@@ -86,3 +86,21 @@
     background: url(../images/btns_.gif) top center no-repeat;
     text-shadow: 1px 1px 0 #b55f10;
 }
+
+#loading{
+    position: fixed;
+    margin: 0 auto;
+    width: 100%;
+    background: #ececec;
+    height: 100%;
+    z-index: 999;
+    opacity: 0.6;
+    left: 0;
+}
+
+#loadingImg{
+    left: 50%;
+    top: 50%;
+    position: absolute;
+    z-index: 99999;
+}

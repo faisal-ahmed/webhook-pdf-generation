@@ -8,11 +8,12 @@
  */
 
 require_once 'controller_helper.php';
+require_once (BASEPATH . "../zoho_library/utils_zoho_request.php");
 
 class zohoapi extends controller_helper{
     function __construct() {
         parent::__construct();
-        require_once (BASEPATH . "../zoho_library/utils_zoho_request.php");
+        $this->load->model('template_persistence');
     }
 
     function index(){

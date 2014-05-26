@@ -163,7 +163,21 @@ class Template_persistence extends model_helper
         return $ret;
     }
 
-    function getURL($id){
+    function replaceShortCodeWithValue($html, $shortCodesValues){
+        foreach ($shortCodesValues as $key => $value) {
+            $tempKey = SHORTCODE_PREFIX . $key . SHORTCODE_SUFFIX;
+            if (strpos($html, $tempKey) !== false) {
+                str_replace($tempKey, $value, $html);
+            }
+        }
+
+        return $html;
+    }
+
+    function getHTML($id = null){
+        if ($id === null) {
+            $id = $this->getPost('template_id');
+        }
         $ret = array();
         $htmlFile = '';
         $cssFile = '';
@@ -208,6 +222,7 @@ class Template_persistence extends model_helper
         $contents .= "</html>";
         $ret['html'] = $contents;
         $ret['template_name'] = $template_name;
+        $ret['template_id'] = $id;
 
         return $ret;
     }

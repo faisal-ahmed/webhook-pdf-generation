@@ -22,7 +22,7 @@ class pdf extends controller_helper{
 
     function view(){
         $id = $this->uri->segment(3);
-        $data = $this->template_persistence->getURL($id);
+        $data = $this->template_persistence->getHTML($id);
         $this->load->view("view_pdf", $data);
     }
 }

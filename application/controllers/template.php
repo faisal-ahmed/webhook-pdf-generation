@@ -33,7 +33,15 @@ class template extends controller_helper{
     }
 
     function editTemplate(){
-        $this->addViewData('active_menu', 'edit_template');
+        $this->addViewData('active_menu', 'update_template');
+        $id = $this->uri->segment(3, false);
+
+        if ($id !== false) {
+            //Load the content here
+            $this->addViewData("template", $this->template_persistence->getHTML($id));
+        }
+
+        $this->addViewData('template_lists', $this->template_persistence->getTemplateLists());
         $this->loadview('edit_template');
     }
 
@@ -56,6 +64,10 @@ class template extends controller_helper{
         } else {
             redirect('template/listTemplate/?status=deleteFailed', 'refresh');
         }
+    }
+
+    function getTemplateContentAjax(){
+        echo json_encode($this->template_persistence->getHTML());
     }
 
     function checkTemplateNameForAjax(){
