@@ -226,6 +226,30 @@ class Template_persistence extends model_helper
 
         return $ret;
     }
+
+    function updateTemplateStatus(){
+        $id = $this->getPost('template_id');
+        $html = $this->getPost('html');
+
+        $htmlFile = '';
+        $template_name = '';
+        $query = $this->db->get_where('template', array('template_id' => $id));
+        foreach ($query->result() as $row)
+        {
+            $template_name = str_replace(" ", "_", $row->template_name);
+            $htmlFile = $row->uploaded_html_file_name;
+            break;
+        }
+
+        if ($htmlFile !== '') {
+            $htmlFile = $this->getRootRealPath() . "static/" . $template_name . "/" . $htmlFile;
+            $handle = fopen($htmlFile, "wb");
+            $writeStatus = fwrite($handle, $html);
+            return !!($writeStatus) ? !!$writeStatus : "Error! File cannot be updated now. Please try again later.";
+        } else {
+            return 'Error! No HTML template was found for that name. Please upload HTML template first.';
+        }
+    }
 }
 
 ?>

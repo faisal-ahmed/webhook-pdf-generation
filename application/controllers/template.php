@@ -23,8 +23,8 @@ class template extends controller_helper{
     function addTemplate(){
         $this->addViewData('active_menu', 'add_template');
         if ($this->input->server('REQUEST_METHOD') === 'POST') {
-            if (($addTemlateStatus = $this->template_persistence->addTemplate()) !== true){
-                $this->addViewData('error', array($addTemlateStatus));
+            if (($addTemplateStatus = $this->template_persistence->addTemplate()) !== true){
+                $this->addViewData('error', array($addTemplateStatus));
             } else {
                 $this->addViewData('success', array('The template has been created successfully!'));
             }
@@ -39,6 +39,14 @@ class template extends controller_helper{
         if ($id !== false) {
             //Load the content here
             $this->addViewData("template", $this->template_persistence->getHTML($id));
+        }
+
+        if ($this->input->server('REQUEST_METHOD') === 'POST') {
+            if (($updateTemplateStatus = $this->template_persistence->updateTemplateStatus()) !== true){
+                $this->addViewData('error', array($updateTemplateStatus));
+            } else {
+                $this->addViewData('success', array('The template has been updated successfully!'));
+            }
         }
 
         $this->addViewData('template_lists', $this->template_persistence->getTemplateLists());

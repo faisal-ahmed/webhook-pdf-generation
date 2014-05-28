@@ -1,4 +1,5 @@
 <div class="sidebar_content">
+    <?php include_once 'error.php' ?>
     <?php echo form_open_multipart('template/editTemplate', array('id' => 'updateTemplate')); ?>
         <p><label>Select label:</label> <br />
 
@@ -14,7 +15,7 @@
         <div id="templateContent" style="<?php echo (!isset($template['template_id'])) ? 'display:none;' : ""; ?>">
             <p>
                 <label>HTML Content:</label><br />
-                <textarea cols="80" id="editor1" name="editor1" rows="10"><?php if (isset($template['html'])) { echo $template['html']; } ?></textarea>
+                <textarea cols="80" id="editor1" name="html" rows="10"><?php if (isset($template['html'])) { echo $template['html']; } ?></textarea>
             </p>
 
             <hr/>
@@ -33,7 +34,7 @@
         var e = document.getElementById("template_list");
         var template_id = e.options[e.selectedIndex].value;
         if (template_id != 'none') {
-            $('#template_list').val(template_id);
+            $('#template_id').val(template_id);
             $('#loadingDiv').slideToggle();
             var url = "<?php echo base_url() ?>index.php/template/getTemplateContentAjax";
             $.post(url, {template_id: template_id}, function (data) {
