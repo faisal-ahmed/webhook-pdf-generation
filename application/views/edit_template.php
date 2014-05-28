@@ -1,10 +1,10 @@
 <div class="sidebar_content">
     <?php include_once 'error.php' ?>
     <?php echo form_open_multipart('template/editTemplate', array('id' => 'updateTemplate')); ?>
-        <p><label>Select label:</label> <br />
+        <p><label>Select Template:</label> <br />
 
             <select name="template_list" id="template_list" onchange="loadTemplate();" class="styled">
-                <option value="none">Select Template</option>
+                <option value="none">None</option>
             <?php foreach ($template_lists as $key => $value) { ?>
                 <option value="<?php echo $value['template_id'] ?>" <?php echo (isset($template['template_id']) && $template['template_id'] == $value['template_id']) ? "selected=\"selected\"" : "" ?>><?php echo $value['template_name'] ?></option>
             <?php } ?>

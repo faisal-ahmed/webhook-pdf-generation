@@ -247,6 +247,46 @@ $(function () {
         });
     }
 
+    // File upload
+    if ($('#imageupload').length) {
+        new AjaxUpload('imageupload', {
+            action: base_url + 'upload-handler.php',
+            autoSubmit: true,
+            name: 'userfile',
+            responseType: 'text/html',
+            onSubmit: function (file, ext) {
+                var template_id = $('#template_id').val();
+                if (validateImageFileExt(ext) != true) {
+                    $('.imageupload #uploadmsg').text("File type doesn't match. Allowed types are JPEG/JPG/PNG/GIF.");
+                    $('.imageupload .file').addClass('redBorder');
+                    return false;
+                }
+                this.setData({template_id: template_id, image: true});
+                $('.imageupload #uploadmsg').addClass('loading').text('Uploading...');
+                this.disable();
+            },
+            onComplete: function (file, response) {
+                var fileName = response.substr(0, response.indexOf("___"));
+                var message = response.substr((response.indexOf("___") + 3));
+                $('#uploaded_image_file_name').attr('value', fileName);
+                $('.imageupload #uploadmsg').removeClass('loading').text(message);
+                $('.imageupload .file').removeClass('redBorder');
+                this.enable();
+            }
+        });
+    }
+
+    function validateImageFileExt(ext) {
+        var imageType = ['png', 'jpg', 'jpeg', 'gif'], i;
+        for ( i = 0; i < imageType.length; i++) {
+            if (imageType[i] == ext) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     function validateHTMLFileExt(ext) {
         if (ext == 'html' || ext == 'htm') return true;
         else return false;

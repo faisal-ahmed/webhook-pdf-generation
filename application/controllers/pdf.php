@@ -25,4 +25,10 @@ class pdf extends controller_helper{
         $data = $this->template_persistence->getHTML($id);
         $this->load->view("view_pdf", $data);
     }
+
+    function uploadImages(){
+        $this->addViewData('active_menu', 'upload_images');
+        $this->addViewData('template_lists', $this->template_persistence->getTemplateLists());
+        $this->loadview('upload_images');
+    }
 }
