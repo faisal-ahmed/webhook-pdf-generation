@@ -245,6 +245,14 @@ class Template_persistence extends model_helper
             $htmlFile = $this->getRootRealPath() . "static/" . $template_name . "/" . $htmlFile;
             $handle = fopen($htmlFile, "wb");
             $writeStatus = fwrite($handle, $html);
+
+            $data = array(
+                'updated' => time(),
+            );
+
+            $this->db->where('template_id', $id);
+            $this->db->update('template', $data);
+
             return !!($writeStatus) ? !!$writeStatus : "Error! File cannot be updated now. Please try again later.";
         } else {
             return 'Error! No HTML template was found for that name. Please upload HTML template first.';
