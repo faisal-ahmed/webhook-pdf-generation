@@ -37,7 +37,6 @@ class template extends controller_helper{
         $id = $this->uri->segment(3, false);
 
         if ($id !== false) {
-            //Load the content here
             $this->addViewData("template", $this->template_persistence->getHTML($id));
         }
 

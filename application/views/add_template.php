@@ -90,21 +90,23 @@
         if (invalidTemplateName()) {
             return;
         }
-        if ($('#template_name').val().trim() != '' && reset != 1) {
-            $('#emptyTemplate').hide();
-            $('#template_name').removeClass('redBorder');
-        } else if (validated || reset == '1') {
-            validated = 0;
-            $('#uploadTemplate').slideToggle();
-            $('#next').slideToggle();
-            $('#uploaded_html_file_name').val('');
-            $('#uploaded_css_file_name').val('');
+        if (reset == '0') {
+            if ($('#template_name').val().trim() != '') {
+                $('#emptyTemplate').hide();
+                $('#template_name').removeClass('redBorder');
+            } else {
+                $('#emptyTemplate').slideDown();
+                $('#template_name').addClass('redBorder');
+            }
+        } else if (reset == '1') {
             $('#template_name').addClass('redBorder');
             $('#emptyTemplate').slideDown();
-        } else {
-            $('#emptyTemplate').slideDown();
-            $('#template_name').addClass('redBorder');
         }
+        validated = 0;
+        $('#uploadTemplate').slideUp();
+        $('#next').slideDown();
+        $('#uploaded_html_file_name').val('');
+        $('#uploaded_css_file_name').val('');
     }
 
     function validateForm() {

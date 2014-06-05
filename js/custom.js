@@ -261,7 +261,7 @@ $(function () {
                     $('.imageupload .file').addClass('redBorder');
                     return false;
                 }
-                this.setData({template_id: template_id, image: true});
+                this.setData({template_id: template_id, image: true, base_url: base_url});
                 $('.imageupload #uploadmsg').addClass('loading').text('Uploading...');
                 this.disable();
             },

@@ -15,7 +15,7 @@
         <?php if (count($lists) > 0) { foreach ($lists as $key => $value) { ?>
             <tr>
                 <td style="display: none"><input type="checkbox" /></td>
-                <td style="border-left: 1px solid #ddd;"><a href="#"><?php echo $value['template_name'] ?></a></td>
+                <td style="border-left: 1px solid #ddd;"><a href="<?php echo base_url() ?>index.php/template/editTemplate/<?php echo $value['template_id']; ?>" title="Update Template"><?php echo $value['template_name'] ?></a></td>
                 <td><?php echo date("m/d/Y", $value['created']) ?></td>
                 <td><?php echo ($value['updated'] != '') ? date("m/d/Y", $value['updated']) : "Not Updated Yet"; ?></td>
                 <td class="delete" style="text-decoration: none;"><a href="<?php echo base_url() ?>index.php/pdf/view/<?php echo $value['template_id']; ?>" target="_blank">View PDF</a> | <a href="<?php echo base_url() ?>index.php/template/editTemplate/<?php echo $value['template_id']; ?>">Update</a> | <a href="#" onclick="confirmDelete(<?php echo $value['template_id'] ?>)">Delete</a></td>
