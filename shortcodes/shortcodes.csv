@@ -1,0 +1,5 @@
+"module_name","field_name","shortcode"
+"Leads","First Name","[___Leads__First__Name___]"
+"Leads","Last Name","[___Leads__Last__Name___]"
+"Leads","Email","[___Leads__Email___]"
+"0","Phone","[___0__Phone___]"
