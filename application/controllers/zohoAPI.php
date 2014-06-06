@@ -75,8 +75,7 @@ class zohoapi extends controller_helper{
     }
 
     function updateData($account_id, $potential_id, $data) {
-        $history = $data['history_field'];
-        $history .= ($data['history_field'] !== 'null') ? "\n\n" : "";
+        $history = ($data['history_field'] !== 'null') ? "{$data['history_field']}\n\n" : "";
         $history .= "Sent Date: {$data['date']}, " . str_replace("__", " ", ZOHO_TARIFA_FIELD) . ": {$data['tarifa']}\n";
         $history .= str_replace("__", " ", ZOHO_RERERENCIA_FIELD) . ": {$data['referencia']}, " . str_replace("__", " ", ZOHO_COMERCIALIZODORA_FIELD) . ": {$data['comercializodora']}\n";
         $history .= "Name: {$data['contract']}, " . "PDF Contract URL: {$data['single_url_field']}\n";
