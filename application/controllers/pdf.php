@@ -8,14 +8,11 @@
  */
 
 require_once 'controller_helper.php';
-require_once(str_replace("system/", "", BASEPATH) . 'htmltopdf/WkHtmlToPdf.php');
 
 class pdf extends controller_helper{
     function __construct() {
         parent::__construct();
         $this->checkLogin();
-        $this->load->model('template_persistence');
-        $this->load->model('shortcode');
     }
 
     function index(){
@@ -29,18 +26,6 @@ class pdf extends controller_helper{
         $pdfUrl['pdfUrl'] = BASE_ABSOLUTE_PATH . STATIC_DIRECTORY_NAME . "/{$data['template_name']}/{$data['uploaded_html_file_name']}";
         $this->load->view("view_pdf", $pdfUrl);
 //        echo $this->savePDF('2112', $id, array('[___Leads__Email___]' => 'faisal.ahmed0001@gmail.com'));
-    }
-
-    function savePDF($zohoId, $templateId, $fieldReplaceMap) {
-        global $options;
-        $url = ZOHO_OFFER_DIRECTORY_PATH . time() . "$zohoId.pdf";
-        $existingShortCodes = $this->shortcode->getAllShortcodes();
-        $pdfUrl = $this->template_persistence->preparePDF($templateId, $fieldReplaceMap, $existingShortCodes);
-        $pdf = new WkHtmlToPdf($options);
-        $pdf->addPage($pdfUrl);
-        $pdf->saveAs($url);
-
-        return $url;
     }
 
     function pdfShortcodes(){

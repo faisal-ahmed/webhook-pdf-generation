@@ -69,7 +69,7 @@ class Shortcode extends model_helper
             return "Error! The ShortCode for this field already exists which is $existingShortCode.";
         }
 
-        $newCode = SHORTCODE_PREFIX . $module_name . "__" . str_replace(" ", "__", $field_name) . SHORTCODE_SUFFIX;
+        $newCode = $this->buildShortCode($module_name, $field_name);
 
         $allFields[] = array(
             $module_name,
@@ -82,6 +82,10 @@ class Shortcode extends model_helper
         }
 
         return "Server Error. Please try again later.";
+    }
+
+    function buildShortCode($module, $key){
+        return SHORTCODE_PREFIX . $module . "__" . str_replace(" ", "__", $key) . SHORTCODE_SUFFIX;
     }
 }
 

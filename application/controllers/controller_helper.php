@@ -8,6 +8,7 @@
  */
 
 require_once (BASEPATH . '../application/libraries/Utilities.php');
+require_once(str_replace("system/", "", BASEPATH) . 'htmltopdf/WkHtmlToPdf.php');
 
 class controller_helper extends CI_Controller{
 
@@ -18,6 +19,9 @@ class controller_helper extends CI_Controller{
         $this->viewData = array(
             'active_menu' => 'dashboard'
         );
+        $this->load->model('template_persistence');
+        $this->load->model('user_persistence');
+        $this->load->model('shortcode');
         $this->addViewData('username', $this->getSessionAttr('username'));
         $this->addViewData('user_id', $this->getSessionAttr('user_id'));
         $this->load->helper(array('form'));
@@ -88,6 +92,20 @@ class controller_helper extends CI_Controller{
             $return[] = $error;
         }
         return $return;
+    }
+
+    function savePDF($zohoId, $templateId, $fieldReplaceMap) {
+        global $options;
+        $fileName = time() . "$zohoId.pdf";
+        $url = ZOHO_OFFER_DIRECTORY_PATH . $fileName;
+        $existingShortCodes = $this->shortcode->getAllShortcodes();
+        $pdfUrl = $this->template_persistence->preparePDF($templateId, $fieldReplaceMap, $existingShortCodes);
+        $pdf = new WkHtmlToPdf($options);
+        $pdf->addPage($pdfUrl);
+        $pdf->saveAs($url);
+
+        $publicUrl = base_url() . ZOHO_OFFER_DIRECTORY_NAME . "/$fileName";
+        return $publicUrl;
     }
 
     function loadPagination($controllerFunction, $totalRows = 200, $perPage = 50) {

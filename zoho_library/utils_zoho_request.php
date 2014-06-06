@@ -1,6 +1,5 @@
 <?php
 
-include_once 'Utilities.php';
 include_once 'ZohoIntegrator.php';
 
 class ZohoDataSync extends ZohoIntegrator
@@ -36,6 +35,20 @@ class ZohoDataSync extends ZohoIntegrator
         if ($wfTrigger != 'false') $this->setWfTrigger($wfTrigger);
         if (($xmlSet = $this->setZohoXmlColumnNameAndValue($xmlArray)) !== true) return $xmlSet;
 
+        $this->setZohoExtendedUriParameter($extraParameter);
+
+        return $this->doRequest();
+    }
+
+    public function getRecordById($moduleName, $id, $newFormat = 1)
+    {
+        $this->resetWithDefaults();
+        $this->setZohoModuleName("$moduleName");
+        $this->setZohoApiOperationType('getRecordById');
+        $extraParameter = array(
+            "id" => "$id",
+            "newFormat" => $newFormat
+        );
         $this->setZohoExtendedUriParameter($extraParameter);
 
         return $this->doRequest();

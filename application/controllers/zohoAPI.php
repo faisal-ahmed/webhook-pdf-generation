@@ -13,10 +13,91 @@ require_once (BASEPATH . "../zoho_library/utils_zoho_request.php");
 class zohoapi extends controller_helper{
     function __construct() {
         parent::__construct();
-        $this->load->model('template_persistence');
     }
 
     function index(){
-        echo "Hello World";
+        $security_token = $_REQUEST['token'];
+        if ($security_token === TOKEN) {
+            global $zohoModules;
+            $id = $_REQUEST['id'];
+            $potential_id = $_REQUEST['potential_id'];
+            $template_name = $_REQUEST['template_name'];
+            $template = $this->template_persistence->getTemplateByName($template_name);
+            $offer_module = array_search(OFFER_MODULE_IN_HERE, $zohoModules);
+            $potential_module = array_search(POTENTIAL_MODULE, $zohoModules);
+            $mapping_array = $this->getRecordById($offer_module, $id);
+            $mapping_array = array_merge($mapping_array, $this->getRecordById($potential_module, $potential_id));
+            $this->debug($mapping_array);
+
+            $url = $this->savePDF($potential_id, $template['template_id'], $mapping_array);
+
+            $data = array(
+                'date' => date('d/m/Y'),
+                'tarifa' => $mapping_array[$this->shortcode->buildShortCode(OFFER_MODULE, ZOHO_TARIFA_FIELD)],
+                'referencia' => $mapping_array[$this->shortcode->buildShortCode(OFFER_MODULE, ZOHO_RERERENCIA_FIELD)],
+                'comercializodora' => $mapping_array[$this->shortcode->buildShortCode(OFFER_MODULE, ZOHO_COMERCIALIZODORA_FIELD)],
+                'contract' => $mapping_array[$this->shortcode->buildShortCode(OFFER_MODULE, ZOHO_CONTRACT_NAME_FIELD)],
+                'history_field' => $mapping_array[$this->shortcode->buildShortCode(POTENTIAL_MODULE, ZOHO_HISTORY_FIELD_NAME)],
+                'single_url_field' => $url,
+            );
+
+            $this->updateData($mapping_array[$this->shortcode->buildShortCode(POTENTIAL_MODULE, ZOHO_ACCOUNTID_FIELD)], $potential_id, $data);
+        }
+    }
+
+    function getRecordById($module, $id) {
+        echo $module;
+        $ret = array();
+        $zohoConnector = new ZohoDataSync();
+        $data = $zohoConnector->getRecordById($module, $id, 2);
+        $this->debug($data);
+        $xml = simplexml_load_string($data);
+
+        if (isset($xml->result->{$module}->row)) {
+            foreach ($xml->result->{$module}->row as $key => $rows) {
+                foreach ($rows->FL as $key2 => $value) {
+                    $ret[str_replace(" ", "__", $value['val'])] = trim($value);
+                }
+            }
+        }
+
+        return $this->makeShortCodes($module, $ret);
+    }
+
+    function makeShortCodes($module, $data){
+        $return = array();
+        foreach ($data as $key => $value) {
+            $tempKey = SHORTCODE_PREFIX . $module . "__" . $key . SHORTCODE_SUFFIX;
+            $return[$tempKey] = $value;
+        }
+
+        return $return;
+    }
+
+    function updateData($account_id, $potential_id, $data) {
+        $history = $data['history_field'];
+        $history .= ($data['history_field'] !== 'null') ? "\n\n" : "";
+        $history .= "Sent Date: {$data['date']}, " . str_replace("__", " ", ZOHO_TARIFA_FIELD) . ": {$data['tarifa']}\n";
+        $history .= str_replace("__", " ", ZOHO_RERERENCIA_FIELD) . ": {$data['referencia']}, " . str_replace("__", " ", ZOHO_COMERCIALIZODORA_FIELD) . ": {$data['comercializodora']}\n";
+        $history .= "Name: {$data['contract']}, " . "PDF Contract URL: {$data['single_url_field']}\n";
+        $xmlArrayForPotential = array(
+            1 => array(
+                str_replace("__", " ", ZOHO_HISTORY_FIELD_NAME) => $history,
+                str_replace("__", " ", ZOHO_PUBLIC_PDF_URL_FIELD_NAME) => $data['single_url_field'],
+            ),
+        );
+
+        $zohoConnector = new ZohoDataSync();
+        $response = $zohoConnector->updateRecords(POTENTIAL_MODULE, $potential_id, $xmlArrayForPotential);
+        $this->debug($response);
+
+        $xmlArrayForAccount = array(
+            1 => array(
+                str_replace("__", " ", ZOHO_HISTORY_FIELD_NAME) => $history,
+            ),
+        );
+
+        $response = $zohoConnector->updateRecords(ACCOUNT_MODULE, $account_id, $xmlArrayForAccount);
+        $this->debug($response);
     }
 }

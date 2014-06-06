@@ -13,7 +13,6 @@ class template extends controller_helper{
     function __construct() {
         parent::__construct();
         $this->checkLogin();
-        $this->load->model('template_persistence');
     }
 
     function index(){
