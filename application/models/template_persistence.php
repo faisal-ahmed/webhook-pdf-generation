@@ -233,7 +233,6 @@ class Template_persistence extends model_helper
         return $ret;
     }
 
-
     function preparePDF($id, $fieldReplaceMap, $existingShortCodes){
         $data = $this->getHTML($id);
         $contents = $this->replaceShortCodeWithValue($data['html'], $fieldReplaceMap, $existingShortCodes);
@@ -241,8 +240,9 @@ class Template_persistence extends model_helper
         $pdfUrl = BASE_ABSOLUTE_PATH . STATIC_DIRECTORY_NAME . "/{$data['template_name']}/preparedPDF.html";
         $handle = fopen($pdfUrl, "wb");
         $writeStatus = fwrite($handle, $contents);
+        $urlSend = base_url() . STATIC_DIRECTORY_NAME . "/{$data['template_name']}/preparedPDF.html";
 
-        return ($writeStatus !== false) ? $pdfUrl : false;
+        return ($writeStatus !== false) ? $urlSend : false;
     }
 }
 

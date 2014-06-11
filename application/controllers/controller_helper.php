@@ -7,8 +7,9 @@
  * To change this template use File | Settings | File Templates.
  */
 
+ini_set("allow_url_include", true);
+
 require_once (BASEPATH . '../application/libraries/Utilities.php');
-require_once(str_replace("system/", "", BASEPATH) . 'htmltopdf/WkHtmlToPdf.php');
 
 class controller_helper extends CI_Controller{
 
@@ -95,16 +96,13 @@ class controller_helper extends CI_Controller{
     }
 
     function savePDF($zohoId, $templateId, $fieldReplaceMap) {
-        global $options;
         $fileName = time() . "$zohoId.pdf";
-        $url = ZOHO_OFFER_DIRECTORY_PATH . $fileName;
         $existingShortCodes = $this->shortcode->getAllShortcodes();
         $pdfUrl = $this->template_persistence->preparePDF($templateId, $fieldReplaceMap, $existingShortCodes);
-        $pdf = new WkHtmlToPdf($options);
-        $pdf->addPage($pdfUrl);
-        $pdf->saveAs($url);
-
+        $url = json_decode(file_get_contents(PDF_API_SERVER_URL . '?url=' . $pdfUrl . '&zoho_id=' . $zohoId));
         $publicUrl = base_url() . ZOHO_OFFER_DIRECTORY_NAME . "/$fileName";
+        $absoluteUrl = ZOHO_OFFER_DIRECTORY_PATH . "$fileName";
+        $copy = copy( ('http://' . $url->url), $absoluteUrl);
         return $publicUrl;
     }
 

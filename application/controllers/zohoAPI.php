@@ -56,7 +56,8 @@ class zohoapi extends controller_helper{
         if (isset($xml->result->{$module}->row)) {
             foreach ($xml->result->{$module}->row as $key => $rows) {
                 foreach ($rows->FL as $key2 => $value) {
-                    $ret[str_replace(" ", "__", $value['val'])] = trim($value);
+                    $fieldKey = htmlentities($value['val'], null, 'UTF-8');
+                    $ret[str_replace(" ", "__", $fieldKey)] = trim($value);
                 }
             }
         }
@@ -70,6 +71,8 @@ class zohoapi extends controller_helper{
             $tempKey = SHORTCODE_PREFIX . $module . "__" . $key . SHORTCODE_SUFFIX;
             $return[$tempKey] = $value;
         }
+
+        $this->debug($return);
 
         return $return;
     }

@@ -17,6 +17,7 @@ define("ZOHO_OFFER_DIRECTORY_NAME", 'offers');
 define("ZOHO_OFFER_DIRECTORY_PATH", $base_absolute_path . ZOHO_OFFER_DIRECTORY_NAME . "/");
 define("BASE_ABSOLUTE_PATH", $base_absolute_path);
 define("SHORTCODES_FILE_PATH", $shortCodeFilePath);
+define("PDF_API_SERVER_URL", 'http://217.160.105.185/index.php');
 
 define("ZOHO_HISTORY_FIELD_NAME", 'Contratos__(historico)');
 define("ZOHO_PUBLIC_PDF_URL_FIELD_NAME", 'Contrato__(ultimo__enviado)');
@@ -47,15 +48,6 @@ define("TASK_MODULE", "Tasks");
 define("CALL_MODULE", "Calls");
 define("OFFER_MODULE", "CustomModule4");
 define("OFFER_MODULE_IN_HERE", "Offer");
-
-global $options;
-
-$options = array(
-    'binPath' => 'D:/wkhtmltopdf/bin/wkhtmltopdf',
-//    'binPath' => "." . $base_absolute_path . 'htmltopdf/wkhtmltox/bin',
-    'binName' => 'wkhtmltopdf',
-    'tmp' => BASE_ABSOLUTE_PATH . "tmp/"
-);
 
 global $zohoModules;
 

@@ -4,28 +4,28 @@
 
 @font-face {
     font-family: "Calibri";
-    src: url(../../fonts/Calibri/CALIBRI.TTF) format("truetype");
+    src: url(http://localhost/webhook-pdf-generation/fonts/Calibri/CALIBRI.TTF) format("truetype");
 }
 
 @font-face {
     font-family: "Calibri Italic";
-    src: url(../../fonts/Calibri/CALIBRII.TTF) format("truetype");
+    src: url(http://localhost/webhook-pdf-generation/fonts/Calibri/CALIBRII.TTF) format("truetype");
 }
 
 @font-face {
     font-family: "Calibri Bold";
-    src: url(../../fonts/Calibri/CALIBRIB.TTF) format("truetype");
+    src: url(http://localhost/webhook-pdf-generation/fonts/Calibri/CALIBRIB.TTF) format("truetype");
 }
 
 @font-face {
     font-family: "Calibri Bold Italic";
-    src: url(../../fonts/Calibri/CALIBRIZ.TTF) format("truetype");
+    src: url(http://localhost/webhook-pdf-generation/fonts/Calibri/CALIBRIZ.TTF) format("truetype");
 }
 
 
 @font-face {
     font-family: "Asap";
-    src: url(../../fonts/Asap/Asap-Regular.ttf) format("truetype");
+    src: url(http://localhost/webhook-pdf-generation/fonts/Asap/Asap-Regular.ttf) format("truetype");
 }
 
 

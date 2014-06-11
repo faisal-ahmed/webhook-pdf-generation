@@ -4,17 +4,9 @@
  * User: Mohammad Faisal Ahmed <faisal.ahmed0001@gmail.com>
  */
 
-require_once(str_replace("system/", "", BASEPATH) . 'htmltopdf/WkHtmlToPdf.php');
-
-global $options;
-if (isset($pdfUrl) && $pdfUrl !== false) {
-    $pdf = new WkHtmlToPdf($options);
-    $pdf->addPage($pdfUrl);
-    $pdf->addPage('http://www.google.com');
-    $pdf->send();
+if (isset($pdfUrl)) {
+    $url = json_decode(file_get_contents(PDF_API_SERVER_URL . '?url=' . $pdfUrl . '&zoho_id=' . $template_name));
+    echo '<iframe id="view_pdf" width="100%" height="100%" src="http://' . $url->url . '" ></iframe>';
 } else {
     echo "<h1>Server Error! PDF can't be generated now. Please contact with engineer.</h1>";
 }
-
-// ... or send to client as file download
-//$pdf->send('test.pdf');

@@ -40,7 +40,7 @@ class Shortcode extends model_helper
         while ($csv_line = fgetcsv($fp)) {
             $temp = array();
             for ($i = 0, $j = count($csv_line); $i < $j; $i++) {
-                $temp[] = html_entity_decode(trim($csv_line[$i]));
+                $temp[] = html_entity_decode(trim($csv_line[$i]), null, 'UTF-8');
             }
             $return[] = $temp;
         }
@@ -62,7 +62,8 @@ class Shortcode extends model_helper
 
     function addShortcode(){
         $module_name = $this->getPost('zoho_modules');
-        $field_name = $this->getPost('field_name');
+        $field_name = $this->getPost('field_name', false);
+        $field_name = htmlentities($field_name, null, 'UTF-8');
         $allFields = $this->getAllShortcodes();
 
         if ( ($existingShortCode = $this->checkShortCodes($allFields, $module_name, $field_name)) !== false) {
