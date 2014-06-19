@@ -98,8 +98,8 @@ class controller_helper extends CI_Controller{
     function savePDF($zohoId, $templateId, $fieldReplaceMap) {
         $fileName = time() . "$zohoId.pdf";
         $existingShortCodes = $this->shortcode->getAllShortcodes();
-        $pdfUrl = $this->template_persistence->preparePDF($templateId, $fieldReplaceMap, $existingShortCodes);
-        $url = json_decode(file_get_contents(PDF_API_SERVER_URL . '?url=' . $pdfUrl . '&zoho_id=' . $zohoId));
+        $pdf = $this->template_persistence->preparePDF($templateId, $fieldReplaceMap, $existingShortCodes);
+        $url = json_decode(file_get_contents(PDF_API_SERVER_URL . '?folder_path=' . $pdf['folder_path'] . '&files_name=' . $pdf['files_name'] . '&zoho_id=' . $zohoId . '&prefix=prepared'));
         $publicUrl = base_url() . ZOHO_OFFER_DIRECTORY_NAME . "/$fileName";
         $absoluteUrl = ZOHO_OFFER_DIRECTORY_PATH . "$fileName";
         $copy = copy( ('http://' . $url->url), $absoluteUrl);

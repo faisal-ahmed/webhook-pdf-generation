@@ -31,12 +31,26 @@ class template extends controller_helper{
         $this->loadview('add_template');
     }
 
+    function addSubPage(){
+        $this->addViewData('active_menu', 'add_subpage');
+        if ($this->input->server('REQUEST_METHOD') === 'POST') {
+            if (($addTemplateStatus = $this->template_persistence->addSubPage()) !== true){
+                $this->addViewData('error', array($addTemplateStatus));
+            } else {
+                $this->addViewData('success', array('Sub Pages added to the template successfully!'));
+            }
+        }
+        $this->addViewData('template_lists', $this->template_persistence->getTemplateLists());
+        $this->loadview('add_subpage');
+    }
+
     function editTemplate(){
         $this->addViewData('active_menu', 'update_template');
         $id = $this->uri->segment(3, false);
 
         if ($id !== false) {
-            $this->addViewData("template", $this->template_persistence->getHTML($id));
+            $this->addViewData("template_id", $id);
+            $this->addViewData("html_page_lists", $this->template_persistence->getHtmlFileLists($id));
         }
 
         if ($this->input->server('REQUEST_METHOD') === 'POST') {
@@ -74,6 +88,19 @@ class template extends controller_helper{
 
     function getTemplateContentAjax(){
         echo json_encode($this->template_persistence->getHTML());
+    }
+
+    function getTemplateSubPageAjax(){
+        $htmlFileLists = $this->template_persistence->getHtmlFileLists();
+        $return = array(
+            'lists' => '<option value="none">None</option>'
+        );
+        foreach ($htmlFileLists as $key => $value) {
+            $return['lists'] .= "<option value=\"{$value}\">$value</option>";
+        }
+
+        echo json_encode($return);
+        //echo json_encode($htmlFileLists);
     }
 
     function checkTemplateNameForAjax(){

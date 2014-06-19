@@ -23,9 +23,11 @@ class pdf extends controller_helper{
         $id = $this->uri->segment(3);
         $data = $this->template_persistence->getTemplateByID($id);
         $data['template_name'] = $this->template_persistence->createFolderAliasFromName($data['template_name']);
-        $pdfUrl['pdfUrl'] = base_url() . STATIC_DIRECTORY_NAME . "/{$data['template_name']}/{$data['uploaded_html_file_name']}";
+        $pdfUrl['base_url'] = base_url() . STATIC_DIRECTORY_NAME . "/{$data['template_name']}";
+        $pdfUrl['files_name'] = $data['uploaded_html_file_name'];
         $pdfUrl['template_name'] = $data['template_name'];
-        $this->load->view("view_pdf", $pdfUrl);
+        $this->addViewData('pdf', $pdfUrl);
+        $this->loadview("view_pdf");
     }
 
     function pdfShortcodes(){

@@ -86,9 +86,15 @@ class Template_persistence extends model_helper
         return $ret;
     }
 
-    function deleteTemplateFile($fileName, $folderName){
+    function deleteTemplateFile($fileName, $folderName, $css = false){
         $folderName = $this->createFolderAliasFromName($folderName);
         $filePath = BASE_ABSOLUTE_PATH . STATIC_DIRECTORY_NAME . "/$folderName/$fileName";
+        if ($css !== true) {
+            $newFilePath = BASE_ABSOLUTE_PATH . STATIC_DIRECTORY_NAME . "/$folderName/prepared$fileName";
+            if (file_exists($newFilePath)) {
+                unlink($newFilePath);
+            }
+        }
         if (file_exists($filePath)) {
             return unlink($filePath);
         }
@@ -122,7 +128,7 @@ class Template_persistence extends model_helper
             $result = false;
             if ($successfullyCreatedFolder) {
                 $filesDeleted = ($successfullyMovedHTMLFile) ? $this->deleteTemplateFile($data['uploaded_html_file_name'], $data['template_name']) : "";
-                $filesDeleted = ($successfullyMovedCSSFile) ? $this->deleteTemplateFile($data['uploaded_css_file_name'], $data['template_name']) : "";
+                $filesDeleted = ($successfullyMovedCSSFile) ? $this->deleteTemplateFile($data['uploaded_css_file_name'], $data['template_name'], true) : "";
                 $folderDeleted = $this->deleteTemplateFolder($data['template_name']);
                 if (!$folderDeleted) {
                     $data['junk'] = 1;
@@ -136,20 +142,49 @@ class Template_persistence extends model_helper
         return ($result !== true) ? "Server Error! Template cannot be added now. Please try again later." : $result;
     }
 
+    function addSubPage(){
+        $uploaded_html_file_name = $this->getPost('uploaded_html_file_name');
+        $template_id = $this->getPost('template_id');
+        $data = $this->getTemplateByID($template_id);
+        $htmlFileName = $data['uploaded_html_file_name'];
+        $newHtmlFile = "$htmlFileName;$uploaded_html_file_name";
+
+        $update = array(
+            'uploaded_html_file_name' => $newHtmlFile
+        );
+
+        $successfullyMovedHTMLFile = $this->moveUploadedTemplateFile($uploaded_html_file_name, $data['template_name']);
+
+        if (!$successfullyMovedHTMLFile) {
+            $result = false;
+        } else {
+            $this->db->where('template_id', $template_id);
+            $result = $this->db->update('template', $update);
+        }
+
+        return ($result !== true) ? "Server Error! Additional pages addition failed. Please contact administrator." : $result;
+    }
+
     function deleteTemplate($id){
         $data = $this->getTemplateByID($id);
-        $htmlFileName = $data['uploaded_html_file_name'];
+        $htmlFileName = explode(';', $data['uploaded_html_file_name']);
         $cssFileName = $data['uploaded_css_file_name'];
         $folderName = $data['template_name'];
 
         $folderDeleted = false;
         $dbRecord = false;
+        $htmlFlag = true;
 
-        $htmlDeleted = ($htmlFileName != '') ? $this->deleteTemplateFile($htmlFileName, $folderName) : true;
-        $cssDeleted = ($cssFileName != '') ? $this->deleteTemplateFile($cssFileName, $folderName) : true;
-        $sampleDeleted = $this->deleteTemplateFile('preparedPDF.html', $folderName);
+        foreach ($htmlFileName as $key => $value) {
+            $fileDeleted = $this->deleteTemplateFile($value, $folderName);
+            if ($fileDeleted === false) {
+                $htmlFlag = false;
+                break;
+            }
+        }
+        $cssDeleted = ($cssFileName != '') ? $this->deleteTemplateFile($cssFileName, $folderName, true) : true;
 
-        if ($htmlDeleted && $cssDeleted && $sampleDeleted) {
+        if ($htmlFlag && $cssDeleted) {
             $folderDeleted = $this->deleteTemplateFolder($folderName);
         }
         if ($folderDeleted) {
@@ -161,10 +196,10 @@ class Template_persistence extends model_helper
 
     function updateTemplateStatus(){
         $id = $this->getPost('template_id');
+        $htmlFile = $this->getPost('html_file_name');
         $html = $this->getPost('html', false);
 
         $data = $this->getTemplateByID($id);
-        $htmlFile = $data['uploaded_html_file_name'];
         $template_name = $this->createFolderAliasFromName($data['template_name']);
 
         if ($htmlFile !== '') {
@@ -190,7 +225,7 @@ class Template_persistence extends model_helper
             if (!$key) continue;
             $value = $row[2];
             if (strpos($html, $value) !== false) {
-                $replace = (isset($shortCodesValues[$value])) ? $shortCodesValues[$value] : "";
+                $replace = (isset($shortCodesValues[$value]) && $shortCodesValues[$value] !== 'null') ? $shortCodesValues[$value] : "";
                 $html = str_replace($value, $replace, $html);
             }
         }
@@ -198,20 +233,25 @@ class Template_persistence extends model_helper
         return $html;
     }
 
-    function getHTML($id = null){
+    function getHtmlFileLists($id = null){
         if ($id === null) {
             $id = $this->getPost('template_id');
         }
-        $ret = array();
-        $htmlFile = '';
-        $template_name = '';
-        $query = $this->db->get_where('template', array('template_id' => $id));
-        foreach ($query->result() as $row)
-        {
-            $template_name = str_replace(" ", "_", $row->template_name);
-            $htmlFile = $row->uploaded_html_file_name;
-            break;
+        $data = $this->getTemplateByID($id);
+        return explode(';', $data['uploaded_html_file_name']);
+    }
+
+    function getHTML($id = null, $htmlFile = null){
+        if ($id === null) {
+            $id = $this->getPost('template_id');
         }
+        if ($htmlFile === null) {
+            $htmlFile = $this->getPost('html_file_name');
+        }
+        $ret = array();
+
+        $data = $this->getTemplateByID($id);
+        $template_name = $this->createFolderAliasFromName($data['template_name']);
 
         $contents = '';
         if ($htmlFile !== '') {
@@ -224,25 +264,32 @@ class Template_persistence extends model_helper
             fclose($handle);
             ///////////////////HTML Load End//////////////////////
         } else {
-            $contents .= "<h1>Error! No HTML template was found. Please upload HTML template first.</h1>";
+            $contents .= "<h1>Error! No HTML template was found on that name.</h1>";
         }
         $ret['html'] = $contents;
-        $ret['template_name'] = $template_name;
         $ret['template_id'] = $id;
 
         return $ret;
     }
 
     function preparePDF($id, $fieldReplaceMap, $existingShortCodes){
-        $data = $this->getHTML($id);
-        $contents = $this->replaceShortCodeWithValue($data['html'], $fieldReplaceMap, $existingShortCodes);
+        $templateFiles = $this->getHtmlFileLists($id);
+        $template = $this->getTemplateByID($id);
+        $templateName = $this->createFolderAliasFromName($template['template_name']);
+        foreach ($templateFiles as $key => $value) {
+            $data = $this->getHTML($id, $value);
+            $contents = $this->replaceShortCodeWithValue($data['html'], $fieldReplaceMap, $existingShortCodes);
 
-        $pdfUrl = BASE_ABSOLUTE_PATH . STATIC_DIRECTORY_NAME . "/{$data['template_name']}/preparedPDF.html";
-        $handle = fopen($pdfUrl, "wb");
-        $writeStatus = fwrite($handle, $contents);
-        $urlSend = base_url() . STATIC_DIRECTORY_NAME . "/{$data['template_name']}/preparedPDF.html";
+            $pdfUrl = BASE_ABSOLUTE_PATH . STATIC_DIRECTORY_NAME . "/$templateName/prepared$value";
+            $handle = fopen($pdfUrl, "wb");
+            $writeStatus = fwrite($handle, $contents);
+        }
+        $return = array(
+            'folder_path' => base_url() . STATIC_DIRECTORY_NAME . "/$templateName",
+            'files_name' => $template['uploaded_html_file_name'],
+        );
 
-        return ($writeStatus !== false) ? $urlSend : false;
+        return $return;
     }
 }
 

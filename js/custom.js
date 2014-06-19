@@ -171,7 +171,6 @@ $(function () {
         }
     });
 
-
     var base_url = $('#base_url').val();
     // Style file input
     $("input[type=file]").filestyle({

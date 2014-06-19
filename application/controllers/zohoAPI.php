@@ -27,6 +27,7 @@ class zohoapi extends controller_helper{
             $potential_module = array_search(POTENTIAL_MODULE, $zohoModules);
             $mapping_array = $this->getRecordById($offer_module, $id);
             $mapping_array = array_merge($mapping_array, $this->getRecordById($potential_module, $potential_id));
+            $mapping_array = array_merge($mapping_array, $this->getRecordById(ACCOUNT_MODULE, $mapping_array[$this->shortcode->buildShortCode(POTENTIAL_MODULE, ZOHO_ACCOUNTID_FIELD)]));
             $this->debug($mapping_array);
 
             $url = $this->savePDF($potential_id, $template['template_id'], $mapping_array);
@@ -37,7 +38,8 @@ class zohoapi extends controller_helper{
                 'referencia' => $mapping_array[$this->shortcode->buildShortCode(OFFER_MODULE, ZOHO_RERERENCIA_FIELD)],
                 'comercializodora' => $mapping_array[$this->shortcode->buildShortCode(OFFER_MODULE, ZOHO_COMERCIALIZODORA_FIELD)],
                 'contract' => $mapping_array[$this->shortcode->buildShortCode(OFFER_MODULE, ZOHO_CONTRACT_NAME_FIELD)],
-                'history_field' => $mapping_array[$this->shortcode->buildShortCode(POTENTIAL_MODULE, ZOHO_HISTORY_FIELD_NAME)],
+                'history_field_potential' => $mapping_array[$this->shortcode->buildShortCode(POTENTIAL_MODULE, ZOHO_HISTORY_FIELD_NAME)],
+                'history_field_account' => $mapping_array[$this->shortcode->buildShortCode(ACCOUNT_MODULE, ZOHO_HISTORY_FIELD_NAME)],
                 'single_url_field' => $url,
             );
 
@@ -78,13 +80,15 @@ class zohoapi extends controller_helper{
     }
 
     function updateData($account_id, $potential_id, $data) {
-        $history = ($data['history_field'] !== 'null') ? "{$data['history_field']}\n\n" : "";
-        $history .= "Sent Date: {$data['date']}, " . str_replace("__", " ", ZOHO_TARIFA_FIELD) . ": {$data['tarifa']}\n";
-        $history .= str_replace("__", " ", ZOHO_RERERENCIA_FIELD) . ": {$data['referencia']}, " . str_replace("__", " ", ZOHO_COMERCIALIZODORA_FIELD) . ": {$data['comercializodora']}\n";
-        $history .= "Name: {$data['contract']}, " . "PDF Contract URL: {$data['single_url_field']}\n";
+        $new_history = '';
+        $history_potential = ($data['history_field_potential'] !== 'null') ? "{$data['history_field_potential']}\n\n" : "";
+        $history_account = ($data['history_field_account'] !== 'null') ? "{$data['history_field_account']}\n\n" : "";
+        $new_history .= "Sent Date: {$data['date']}, " . str_replace("__", " ", ZOHO_TARIFA_FIELD) . ": {$data['tarifa']}\n";
+        $new_history .= str_replace("__", " ", ZOHO_RERERENCIA_FIELD) . ": {$data['referencia']}, " . str_replace("__", " ", ZOHO_COMERCIALIZODORA_FIELD) . ": {$data['comercializodora']}\n";
+        $new_history .= "Name: {$data['contract']}, " . "PDF Contract URL: {$data['single_url_field']}\n";
         $xmlArrayForPotential = array(
             1 => array(
-                str_replace("__", " ", ZOHO_HISTORY_FIELD_NAME) => $history,
+                str_replace("__", " ", ZOHO_HISTORY_FIELD_NAME) => ( $history_potential . $new_history ),
                 str_replace("__", " ", ZOHO_PUBLIC_PDF_URL_FIELD_NAME) => $data['single_url_field'],
             ),
         );
@@ -95,7 +99,7 @@ class zohoapi extends controller_helper{
 
         $xmlArrayForAccount = array(
             1 => array(
-                str_replace("__", " ", ZOHO_HISTORY_FIELD_NAME) => $history,
+                str_replace("__", " ", ZOHO_HISTORY_FIELD_NAME) => ( $history_account . $new_history ),
             ),
         );
 
