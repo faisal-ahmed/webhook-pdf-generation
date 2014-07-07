@@ -26,8 +26,10 @@ class pdf extends controller_helper{
         $pdfUrl['base_url'] = base_url() . STATIC_DIRECTORY_NAME . "/{$data['template_name']}";
         $pdfUrl['files_name'] = $data['uploaded_html_file_name'];
         $pdfUrl['template_name'] = $data['template_name'];
-        $this->addViewData('pdf', $pdfUrl);
-        $this->loadview("view_pdf");
+        $viewData = array('pdf' => $pdfUrl);
+        $this->load->view("view_pdf", $viewData);
+/*        $this->addViewData('pdf', $pdfUrl);
+        $this->loadview("view_pdf");*/
     }
 
     function pdfShortcodes(){
