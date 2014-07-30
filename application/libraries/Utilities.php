@@ -24,6 +24,8 @@ define("ZOHO_PUBLIC_PDF_URL_FIELD_NAME", 'Contrato__(ultimo__enviado)');
 define("ZOHO_TARIFA_FIELD", 'Tarifa__de__Acceso');
 define("ZOHO_RERERENCIA_FIELD", 'Referencia__TDL');
 define("ZOHO_COMERCIALIZODORA_FIELD", 'Comercializadora__de__la__oferta');
+define("ZOHO_COMERCIALIZODORA_FIELD_ID", 'Comercializadora__de__la__oferta_ID');
+define("LINK_TDL_CONTRATO", 'Link__TDL__contrato');
 define("ZOHO_CONTRACT_NAME_FIELD", 'CustomModule4__Name');
 define("ZOHO_ACCOUNTID_FIELD", 'ACCOUNTID');
 

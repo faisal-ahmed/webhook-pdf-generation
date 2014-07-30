@@ -37,6 +37,8 @@ class zohoapi extends controller_helper{
                 'tarifa' => $mapping_array[$this->shortcode->buildShortCode(OFFER_MODULE, ZOHO_TARIFA_FIELD)],
                 'referencia' => $mapping_array[$this->shortcode->buildShortCode(OFFER_MODULE, ZOHO_RERERENCIA_FIELD)],
                 'comercializodora' => $mapping_array[$this->shortcode->buildShortCode(OFFER_MODULE, ZOHO_COMERCIALIZODORA_FIELD)],
+                'comercializodora_ID' => $mapping_array[$this->shortcode->buildShortCode(OFFER_MODULE, ZOHO_COMERCIALIZODORA_FIELD_ID)],
+                'link_TDL_contrato' => $mapping_array[$this->shortcode->buildShortCode(OFFER_MODULE, LINK_TDL_CONTRATO)],
                 'contract' => $mapping_array[$this->shortcode->buildShortCode(OFFER_MODULE, ZOHO_CONTRACT_NAME_FIELD)],
                 'history_field_potential' => $mapping_array[$this->shortcode->buildShortCode(POTENTIAL_MODULE, ZOHO_HISTORY_FIELD_NAME)],
                 'history_field_account' => $mapping_array[$this->shortcode->buildShortCode(ACCOUNT_MODULE, ZOHO_HISTORY_FIELD_NAME)],
@@ -90,6 +92,9 @@ class zohoapi extends controller_helper{
             1 => array(
                 str_replace("__", " ", ZOHO_HISTORY_FIELD_NAME) => ( $history_potential . $new_history ),
                 str_replace("__", " ", ZOHO_PUBLIC_PDF_URL_FIELD_NAME) => $data['single_url_field'],
+                str_replace("__", " ", ZOHO_RERERENCIA_FIELD) => $data['referencia'],
+                str_replace("__", " ", ZOHO_COMERCIALIZODORA_FIELD_ID) => $data['comercializodora_ID'],
+                str_replace("__", " ", LINK_TDL_CONTRATO) => $data['link_TDL_contrato'],
             ),
         );
 
