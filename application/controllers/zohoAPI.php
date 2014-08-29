@@ -93,11 +93,13 @@ class zohoapi extends controller_helper{
                 str_replace("__", " ", ZOHO_HISTORY_FIELD_NAME) => ( $history_potential . $new_history ),
                 str_replace("__", " ", ZOHO_PUBLIC_PDF_URL_FIELD_NAME) => $data['single_url_field'],
                 str_replace("__", " ", ZOHO_RERERENCIA_FIELD) => $data['referencia'],
-                str_replace("__", " ", ZOHO_COMERCIALIZODORA_FIELD_ID) => $data['comercializodora_ID'],
+                str_replace("__", " ", ZOHO_COMERCIALIZODORA_FIELD_ID) => (($data['comercializodora_ID'] != 'null') ? $data['comercializodora_ID'] : ''),
                 str_replace("__", " ", LINK_TDL_CONTRATO) => $data['link_TDL_contrato'],
             ),
         );
 
+        echo "Potential Array: <br/>";
+        $this->debug($xmlArrayForPotential);
         $zohoConnector = new ZohoDataSync();
         $response = $zohoConnector->updateRecords(POTENTIAL_MODULE, $potential_id, $xmlArrayForPotential);
         $this->debug($response);

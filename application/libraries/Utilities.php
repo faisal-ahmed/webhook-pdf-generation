@@ -60,3 +60,12 @@ $zohoModules = array(
     POTENTIAL_MODULE =>'Potentials',
     VENDOR_MODULE => 'Vendors',
 );
+
+global $checkBoxFields;
+
+$checkBoxFields = array(
+    '[___Potentials__Cambiar__Tarifa__de__acceso___]' => array(
+        'true' => 'Sí',
+        'false' => 'NO',
+    ),
+);

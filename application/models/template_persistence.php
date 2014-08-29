@@ -221,11 +221,17 @@ class Template_persistence extends model_helper
     }
 
     function replaceShortCodeWithValue($html, $shortCodesValues, $existingShortCodes){
+        global $checkBoxFields;
         foreach ($existingShortCodes as $key => $row) {
             if (!$key) continue;
             $value = $row[2];
             if (strpos($html, $value) !== false) {
                 $replace = (isset($shortCodesValues[$value]) && $shortCodesValues[$value] !== 'null') ? $shortCodesValues[$value] : "";
+                if ($replace == 'true' || $replace == 'false') {
+                    if (array_key_exists($value, $checkBoxFields)) {
+                        $replace = $checkBoxFields[$value][$replace];
+                    }
+                }
                 $html = str_replace($value, $replace, $html);
             }
         }
